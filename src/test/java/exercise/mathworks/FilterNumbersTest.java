@@ -21,13 +21,13 @@ public class FilterNumbersTest {
         List<Integer> primeList = new ArrayList<>(Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19));
         List<Integer> oddPrimeList = new ArrayList<>(Arrays.asList(3, 5, 7, 11, 13, 17, 19));
         List<Integer> evenAndMultipleOf5List = new ArrayList<>(Arrays.asList(10, 20));
-        List<Integer> oddAndMultipleOf3GreaterThan10List = new ArrayList<>(Arrays.asList(15));
+        List<Integer> oddAndMultipleOf3GreaterThan10List = new ArrayList<>(List.of(15));
         List<Integer> evenAndLessThan15MultipleOf3List = new ArrayList<>(Arrays.asList( 6, 12));
         List<Integer> primeOrGreaterThan15MultipleOf5List = new ArrayList<>(Arrays.asList(2, 3, 5, 7, 10, 11, 13, 15, 16, 17, 18, 19, 20 ));
 
-        List<String> odd = Arrays.asList("odd");
-        List<String> even = Arrays.asList("even");
-        List<String> prime = Arrays.asList("prime");
+        List<String> odd = List.of("odd");
+        List<String> even = List.of("even");
+        List<String> prime = List.of("prime");
         List<String> oddPrime = Arrays.asList("odd", "prime");
         List<String> evenAndMultipleOf5 = Arrays.asList("even", "multiple of 5");
         List<String> oddAndMultipleOf3GreaterThan10 = Arrays.asList("odd", "multiple of 3", "greater than 10");
