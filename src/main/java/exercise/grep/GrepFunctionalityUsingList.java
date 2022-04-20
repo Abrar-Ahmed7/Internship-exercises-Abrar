@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class GrepFunctionalityUsingList {
@@ -21,6 +23,15 @@ public class GrepFunctionalityUsingList {
         return matchedString;
     }
 
+public Boolean isStringPresent(Path srcFile, String searchString) {
+        try(Stream<String> allLines = Files.lines(srcFile)) {
+            return (allLines.anyMatch(w -> w.toUpperCase().contains(searchString.toUpperCase())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void writeToFile(List<String> matchedLines, Path dstFile) {
 //        This is for converting List of matched lines to a string to write.
         StringBuilder linesToWrite = new StringBuilder();
@@ -29,30 +40,32 @@ public class GrepFunctionalityUsingList {
         }
         try{
             Files.write(dstFile, linesToWrite.toString().getBytes(), StandardOpenOption.CREATE);
-            System.out.println("Written to "+dstFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void recursiveRead(Path folder, String match) {
+    public void readAndWrite(Path srcFile, Path dstFile, String searchString) {
+        List<String> matchedLines = readFromFile(srcFile, searchString);
+        writeToFile(matchedLines, dstFile);
+    }
+
+    public Map<String, List<String>> recursiveRead(Path folder, String match) {
+        Map<String, List<String>> resMap = new LinkedHashMap<>();
          try (Stream<Path> allFiles = Files.walk(folder)) {
             allFiles.forEach(file -> {
-                if (Files.isRegularFile(file)) {
-                    List<String> matchedLines = readFromFile(file, match);
-                    for (String line : matchedLines) {
-                        System.out.println(file + ": " + line);
+                if (Files.isRegularFile(file) && (isStringPresent(file, match))) {
+                        resMap.put(file.toString(),readFromFile(file, match));
                     }
-                }
-            });
+                });
         }    catch (IOException e) {
             e.printStackTrace();
         }
+        return resMap;
     }
 
     public static void main(String[] args) {
         GrepFunctionalityUsingList grepFunctionalityUsingList = new GrepFunctionalityUsingList();
-        grepFunctionalityUsingList.recursiveRead(Path.of("D:\\Internship-tasks\\www\\w"),"hi");
-
+        System.out.println(grepFunctionalityUsingList.recursiveRead(Path.of("src", "test","resources"),"is"));
     }
 }
