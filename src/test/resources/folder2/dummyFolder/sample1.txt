@@ -1,0 +1,21 @@
+The development of this new system contains the following activities,
+which try to automate the entire process keeping in the view of
+database integration approach.
+User Friendliness is provided
+in the application with various controls provided
+by system Rich User Interface.
+The system makes the overall project management
+much easier and flexible. It can be accessed over the Internet.
+Various classes have been used for view the data and video files.
+The user information files can be stored in
+centralized database which can be maintained by the system.
+This can give the good security for user information because data is
+not in client machine. Authentication is
+provided for this application only registered users
+can access .User can get the information provided by admin or system.
+There is no risk of data management at any level while the
+project development is under process.
+User can give suggestion regarding any new course.
+User can track the information regarding of his course.
+Report generation features is provided using crystal reports
+to generate different kind of reports.

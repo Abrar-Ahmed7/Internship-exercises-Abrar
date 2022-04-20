@@ -1,0 +1,9 @@
+Sam is a cat whose owner left him astray in street.
+Files in Java might be tricky but it is fun enough!
+hey you
+foo
+bar
+food
+Files in Java might be tricky
+but it is fun enough!
+java with 'w' (i.e., jawa) is a motorbike
