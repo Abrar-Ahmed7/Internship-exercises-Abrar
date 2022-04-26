@@ -1,0 +1,169 @@
+Build an appointment booking system data model for patients to book appointments with doctors for ABC Hospital.
+
+e.g http://www.sminq.com/company/
+
+Questions:
+---
+- Nature of hospital: Single hospital, not a clinic, has multiple specialities like pediatrician, neuro, cardiology, etc.
+- Opening and closing hours for hospitals for appointments 8am - 10pm all days
+- Doctor's availability hours, fees
+- Slots for appointments
+- Receptionist
+- Actors in the system
+  - Patient (guadian)
+  - Doctor
+  - Hospital Staff (receiptionist)
+- Online booking
+- Location tracking for patient: NO
+- Payment
+- No emergency appointment booking
+- Wait times for patients
+- Patient information
+- Doctor owns their timeslots
+
+Patient:
+---
+- Singup/Login system (name, phone number, email, address)
+- View doctor information/Search for doctors via specialisation
+- Figure out their availability/time
+- Try to book an appointment
+- Rules of appointment booking and cancellation
+- Cancel an appointment
+- Whether appointment is accepted or not
+- Appointment states can be: Requested, Approved, Cancelled, Rejected, Completed
+- Wait time
+20th 10th 15th->30min
+
+Hospital staff (receptionist):
+---
+- Login
+- View appointment requests for a particular doctor
+- Approve/Reject an appointment
+- Get stats for today's appointments
+- Reporting feature
+
+50 requests (30 approved), 10 rejected, 10 still in request state
+3 cancelled, 3 new 
+
+
+Tables:
+---
+
+patient
+---
+- id
+- name
+- gender
+- date of birth
+- mobile number
+- otp
+- otp_expires_at
+- address
+- created_at
+- updated_at
+
+doctor
+---
+- id
+- name
+- gender
+- specilisation (???)
+- degree/education/designation
+- availability?
+
+specilisation
+---
+- id
+- name
+- desc
+
+doctor_specialisation
+---
+- id
+- doctor_id (FK)
+- specialisation_id (FK)
+
+**************************************************
+
+doctor_availability
+---
+-id
+-doctor_id (FK)
+-isLeaveToday
+-in_time
+-out_time
+
+[isLeaveToday column can be taken from leave table of the
+hospital's DB. Ex: hospitalDB.emp_leave table or else
+we have to create a new table for leaves]
+
+requests_for_appoinment:
+---
+-request_id
+-patient_id (FK)
+-requested_on
+-status
+
+appointments:
+---
+-appointment_id
+-request_id (FK)
+-token_number
+-patient_id (FK)
+-appointed time (with date)
+-doctor_id (FK)
+-specialisation_id (FK)
+-created_at
+
+cancellations:
+-cancellation_id
+-appointment_id (FK)
+-patient_id (FK)
+-status [optional field]
+
+***Waiting and Reporting times***
+Default (for n[0]) waiting time is 8 minutes but we can also calculate 
+according to the start and end time of the consultant for the rest of the patients.
+
+By ((token_no - 4 ) * waiting time) + doctor's in_time, we can get the
+reporting time.
+
+waiting_time:
+---
+-patient_id (FK)
+-doctor_id (FK)
+-waiting_time
+-reporting_time
+
+attendence:
+---
+-attendence_id
+-appointment_id(FK)
+-patient_id (FK)
+-status
+
+consultations:
+---
+-consultation_id
+-attendence_id (FK)
+-patient_id (FK)
+-doctor_id (FK)
+-started_at
+-ended_at
+
+payment:
+---
+-payment_id
+-patient_id (FK)
+-consultation_id (FK)
+-doctor_id (FK)
+-amount 
+
+receptionists/hospital_staffs
+---
+-staff_id
+-staff_name
+-gender
+-designation 
+-user_name
+-password 

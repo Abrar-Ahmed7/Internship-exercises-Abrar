@@ -1,0 +1,84 @@
+BAKERY PROBLEM:
+
+-> products table is stand alone
+
+CREATE TABLE PRODUCTS(
+ product_id int PRIMARY KEY NOT NULL,
+ product_name varchar(30) NOT NULL,
+ product_price_per_kg int(10) NOT NULL
+);
+INSERT INTO PRODUCTS VALUES (1,'Chocolate Cake',500);
+INSERT INTO PRODUCTS VALUES (2,'Pineapple Cake',400);
+INSERT INTO PRODUCTS VALUES (3,'Truffle Cake',700);
+
+
+-> one order can have many products
+-> Quantity may differ or independent
+-> Total price = quantity * price per kg from products table
+
+CREATE TABLE ORDERS(
+order_id int NOT NULL,
+product_id int REFERENCES products(product_id),
+time_of_purchase date,
+quantity int(3) NOT NULL,
+total_price int(10) NOT NULL
+);
+
+INSERT INTO ORDERS VALUES (1, 2, '10/04/2022 10:07:57', 2, 800);
+INSERT INTO ORDERS VALUES (1, 3, '10/04/2022 10:07:57', 0.5, 350);
+INSERT INTO ORDERS VALUES (2, 1, '10/04/2022 17:30:17', 4, 2000);
+INSERT INTO ORDERS VALUES (3, 2, 10/04/2022 19:45:22', 3, 1200);
+INSERT INTO ORDERS VALUES (3, 3, '10/04/2022 19:45:22', 2, 1400);
+INSERT INTO ORDERS VALUES (4, 3, '10/04/2022 10:30:32', 5, 3500);
+INSERT INTO ORDERS VALUES (4, 1, '10/04/2022 10:30:32', 6, 3000);
+INSERT INTO ORDERS VALUES (4, 2, '10/04/2022 10:30:32', 1.5, 600);
+INSERT INTO ORDERS VALUES (5, 2, '10/04/2022 16:30:32', 0.75, 375);
+INSERT INTO ORDERS VALUES (6, 3, '10/04/2022 12:30:32', 1.75, 1225);
+INSERT INTO ORDERS VALUES (6, 1, '10/04/2022 12:30:32', 2.75, 1375);
+INSERT INTO ORDERS VALUES (6, 2, '10/04/2022 12:30:32', 3.75, 1500);
+
+-> one payment can have only one order
+-> total_payment = sum(price) in order where orderid is same
+
+CREATE TABLE payments(
+branch varchar(20) NOT NULL,
+payment_id int NOT NULL,
+order_id int references orders(order_id),
+paid_on date,
+Total_payment int(10) NOT NULL
+);
+                          
+INSERT INTO PAYMENTS VALUES('mumbai', 1, 1, 'random', '2022-04-10 10:07:57', 1150);
+INSERT INTO PAYMENTS VALUES('mumbai', 2, 2, 'random1', '2022-04-10 17:30:17', 2000);
+INSERT INTO PAYMENTS VALUES('mumbai', 3, 3, 'random2', '2022-04-10 19:45:22', 4600);
+INSERT INTO PAYMENTS VALUES('bangalore', 4, 4, 'random3', '2022-04-10 10:30:32', 7350);
+INSERT INTO PAYMENTS VALUES('bangalore', 5, 5, 'random4', '2022-04-10 16:30:32', 375);
+INSERT INTO PAYMENTS VALUES('delhi', 6, 6, 'random5', '2022-04-10 12:30:32', 4100);
+
+Answers:
+
+1) SELECT SUM(total_payment) as Revenue, EXTRACT(month from paid_on) as month
+	FROM payments where EXTRACT(month from paid_on) = 4;
+
+2) SELECT SUM(total_payments) as Revenue, EXTRACT(month from paid_on) as months 
+	FROM payments 
+	GROUP BY BRANCH_NAME, MONTH
+	ORDER BY REVENUE DESC;
+
+3) SELECT product_id, sum(quantity) as Quantity, EXTRACT(month from time_of_purchase) as month
+	FROM orders
+	WHERE EXTRACT (month from time_of_purchase) = 4
+	GROUP BY product_id
+	ORDER BY Quantity desc;
+
+Comments on 3rd ans: we can use LIMIT to get Top most item that got sold most.
+
+Options that can be added in the future:
+-> Inventories table
+-> customer table
+-> mode of order (in shop, phone)
+-> delivery needed?
+-> Gifts, coupon, discounts
+-> slow changing dimension for cost
+-> More details i.e., itemizing the bill
+-> adding taxes
