@@ -5,3 +5,4 @@ bar
 food
 Files in Java might be tricky
 but it is fun enough!
+this is a new line.
